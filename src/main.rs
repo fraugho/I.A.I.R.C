@@ -76,17 +76,21 @@ impl Handler<WsMessage> for WsActor {
 impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsActor {
     fn handle(&mut self, msg: Result<ws::Message, ws::ProtocolError>, ctx: &mut Self::Context) {
         if let Ok(ws::Message::Text(text)) = msg {
-            match serde_json::from_str::<Message>(&text) {
-                Ok(mut message) => {
-                    message.id = Some(Utc::now());
-                    // Check if username is empty and set to "None" if it is
-                    if message.username.is_empty() {
-                        message.username = "None".to_string();
-                    }
-                    let serialized_msg = serde_json::to_string(&message).unwrap();
-                    self.state.broadcast_message(serialized_msg, message.sender_id);
-                },
-                Err(e) => eprintln!("Error processing message: {:?}", e),
+            // Check if the message is a command to set username
+            if text.starts_with("set_username:") {
+                let new_username = text.replace("set_username:", "");
+                self.set_username(new_username);
+            } else {
+                // Normal message handling
+                match serde_json::from_str::<Message>(&text) {
+                    Ok(mut message) => {
+                        message.id = Some(Utc::now());
+                        message.username = self.username.clone();
+                        let serialized_msg = serde_json::to_string(&message).unwrap();
+                        self.state.broadcast_message(serialized_msg, message.sender_id);
+                    },
+                    Err(e) => eprintln!("Error processing message: {:?}", e),
+                }
             }
         }
     }
@@ -112,7 +116,7 @@ async fn send_message(state: web::Data<AppState>, message: web::Json<Message>) -
 
 #[get("/")]
 async fn home_page() -> impl Responder {
-    let path = "templates/home_page.html";
+    let path = "static/home_page.html";
     match read_to_string(path) {
         Ok(content) => HttpResponse::Ok().content_type("text/html").body(content),
         Err(err) => {
@@ -134,6 +138,7 @@ async fn main() -> std::io::Result<()> {
             .service(home_page)
             .route("/ws/", web::get().to(ws_index))
             .route("/send_message", web::post().to(send_message))
+            .service(actix_files::Files::new("/static", "static").show_files_listing())
     })
     .bind(("192.168.0.155", 8080))?
     .run()

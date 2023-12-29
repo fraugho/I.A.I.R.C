@@ -1,0 +1,127 @@
+body {
+    background-color: rgba(0, 0, 0, 0); /* 50% transparent black */
+    color: #ffffff;
+}
+.username {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+#chat-container {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 657px;
+    background-color: #000000;
+    color: #ffffff;
+    overflow-y: auto;
+    border: 1px solid #ffffff;
+}
+.chat-message {
+    display: inline-block; /* Makes the element width only as wide as its content */
+    max-width: 50%;       /* Limits the message width to half of its container */
+    word-wrap: break-word;/* Ensures text wraps within the set max-width */
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #ffffff;
+}
+
+.sent-message {
+    background-color: #000000;
+    color: #ffffff;
+    text-align: right;
+    float: right;
+    clear: both;
+    margin: 10px;
+}
+
+.received-message {
+    background-color: #ffffff;
+    color: #000000;
+    text-align: left;
+    float: left;
+    clear: both;
+    margin: 10px;
+}
+
+.message_form {
+    position: fixed;
+    top: 760px;                /* Align to the bottom */
+    left: 55%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: 1fr auto; /* 1fr for textarea, auto for button */
+    background-color: #000000;
+    color: #ffffff;
+    width: 60%;
+}
+
+.message_form textarea {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    height: 100px;            /* Increase textarea height */
+    grid-column: 1;           /* Place in the first column */
+}
+
+.message_form button {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+    height: 106px;            /* Match button height to textarea */
+    grid-column: 2;           /* Place in the second column */
+}
+
+.message_form button:hover {
+    background-color: #B3B6B7;
+    color: #000000;
+}
+
+.username_form {
+    position: fixed;         /* Fixed position at the bottom */
+    top: 760px;             /* Align to the bottom */
+    left: 20%;               /* Center horizontally */
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: 1fr; /* Adjust column widths */
+    grid-template-rows: auto auto; /* One row */
+    background-color: #000000;
+    color: #ffffff;
+    width: 10%;              /* Adjust the width as needed */
+}
+
+.username_form textarea {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    height: 50px;            /* Textarea height */
+    grid-row: 2;             /* Textarea in the second row */
+}
+
+.username_form button {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    cursor: pointer;
+    height: 50px;            /* Button height */
+    grid-row: 1;             /* Button in the first row */
+}
+
+.username_form button:hover {
+    background-color: #B3B6B7;
+    color: #000000;
+}
+
+#canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: #000000; /* Set the background color to black */
+    opacity: 1; /* Set opacity to 1 to ensure it's fully opaque */
+    width: 100%;
+    height: 100%;
+}
