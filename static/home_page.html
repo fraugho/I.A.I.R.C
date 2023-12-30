@@ -4,17 +4,23 @@
     <script src="https://unpkg.com/htmx.org@1.9.9"></script>
     <title>I.A.I.R.C</title>
     <link rel="stylesheet" type="text/css" href="static/styles.css">
+    <link rel="icon" href="static/favicon.png" type="image/x-icon">
 </head>
 <body>
     <canvas id="canvas"></canvas>
     <h1 style="text-align: center; margin: 0; padding: 0;">I.A.I.R.C</h1>
 
-
     <div id="chat-container"></div>
-    <form class="username_form" id="Username">
-        <button type="submit">Set Username</button>
-        <textarea name="username_form" placeholder="Default" id="usernameField"></textarea>
-    </form>
+    <div class="dropdown">
+        <img src="static/settings.svg" class="dropdown-trigger" alt="Settings" style="cursor: pointer;"/>
+        <div class="dropdown-menu">
+            <form class="username_form" id="Username">
+                <button type="submit">Set Username</button>
+                <textarea name="username_form" placeholder="Default" id="usernameField"></textarea>
+            </form>
+        </div>
+    </div>
+    
     <form class="message_form" id="Message">
         <textarea name="message_form" placeholder="Type your message here"></textarea>
         <button type="submit">Send Message</button>
@@ -91,7 +97,19 @@
             }
         });
         
-        
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdownTrigger = document.querySelector('.dropdown-trigger');
+            var dropdownMenu = document.querySelector('.dropdown-menu');
+
+            // Toggle dropdown on SVG click
+            dropdownTrigger.addEventListener('click', function(event) {
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                event.stopPropagation(); // Prevent click from bubbling up
+            });
+
+        });
+
+
     </script>
     <script>
         // JavaScript code goes here

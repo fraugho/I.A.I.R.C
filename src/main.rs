@@ -101,19 +101,6 @@ async fn ws_index(req: actix_web::HttpRequest, stream: web::Payload, state: web:
     ws::start(WsActor { id: Uuid::new_v4(), username: "None".to_string(), state: state.get_ref().clone() }, &req, stream)
 }
 
-async fn send_message(state: web::Data<AppState>, message: web::Json<Message>) -> impl Responder {
-    let msg = message.into_inner();
-
-    let mut messages = state.messages.lock().unwrap();
-    messages.push(msg.clone());
-
-    let serialized_msg = serde_json::to_string(&msg).unwrap();
-
-    state.broadcast_message(serialized_msg, msg.sender_id);
-
-    HttpResponse::Ok().json("Message received")
-}
-
 #[get("/")]
 async fn home_page() -> impl Responder {
     let path = "static/home_page.html";
@@ -137,7 +124,6 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(app_state.clone()))
             .service(home_page)
             .route("/ws/", web::get().to(ws_index))
-            .route("/send_message", web::post().to(send_message))
             .service(actix_files::Files::new("/static", "static").show_files_listing())
     })
     .bind(("192.168.0.155", 8080))?
