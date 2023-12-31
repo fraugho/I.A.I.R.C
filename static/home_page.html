@@ -34,6 +34,10 @@
 
         var socket = new WebSocket("ws://192.168.0.155:8080/ws/");
 
+        socket.onerror = function(event) {
+            console.error("WebSocket error observed:", event);
+        };
+
         socket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             const chatContainer = document.getElementById('chat-container');
@@ -69,7 +73,7 @@
             const message = textarea.value.trim();
 
             if (message !== '') {
-                const payload = { username: '', content: message, sender_id: senderId };
+                const payload = { username: '', content: message, sender_id: senderId, room_id: uuid.v4()};
                 if (socket.readyState === WebSocket.OPEN) {
                     socket.send(JSON.stringify(payload));
                 }
